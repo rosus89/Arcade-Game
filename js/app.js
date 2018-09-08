@@ -1,9 +1,20 @@
 // Enemies our player must avoid
-var Enemy = function(x, y, speed) {
-    this.x = x;
-    this.y = y;
-    this.speed = speed;
-    this.sprite = 'images/enemy-bug.png';
+class Enemy {
+    constructor(x, y, speed){
+        this.x = x;
+        this.y = y;
+        this.speed = speed;
+        this.sprite = "images/enemy-bug.png";
+    }
+    update(dt) {
+        this.x += dt * this.speed;
+        if (this.x > 500){
+            this.x = -100;
+        }
+    }
+    render(){
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    }
 };
 
 // formula taken from https://www.w3schools.com/jsref/jsref_random.asp
@@ -21,18 +32,9 @@ for (row of yPositions){
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
-Enemy.prototype.update = function(dt) {
-    this.x += dt * this.speed;
-    if (this.x > 500){
-        this.x = -100;
-    }
-
-};
 
 // Draw the enemy on the screen, required method for game
-Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-};
+
 
 // Now write your own player class
 // This class requires an update(), render() and
