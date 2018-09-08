@@ -26,18 +26,11 @@ class Enemy {
 };
 
 // formula taken from https://www.w3schools.com/jsref/jsref_random.asp
-function generateSpeed() {
-    return Math.floor(((Math.random() * 100) + 100))
-} 
 
-const allEnemies = [];
-yPositions = [65, 148, 229];
 
-for (row of yPositions){
-    let speed = generateSpeed();
-    enemy = new Enemy(-100, row, speed);
-    allEnemies.push(enemy);
-    }
+
+
+
 
 class Player {
     constructor(type) {
@@ -75,7 +68,23 @@ class Player {
 }
 
 
+let start = {
+    yPositions: [65, 148, 229],
+    allEnemies: [],
+    generateSpeed :function() {
+        // formula taken from https://www.w3schools.com/jsref/jsref_random.asp
+        return Math.floor(Math.random() * 100 + 100);
+    },
+    create: function(){
+        for (row of this.yPositions) {
+            let speed = this.generateSpeed();
+            enemy = new Enemy(-100, row, speed);
+            this.allEnemies.push(enemy);
+        }
+    }
 
+}
+start.create();
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
