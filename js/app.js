@@ -1,4 +1,3 @@
-// Enemies our player must avoid
 class Enemy {
     constructor(x, y, speed){
         this.x = x;
@@ -24,13 +23,6 @@ class Enemy {
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
 };
-
-// formula taken from https://www.w3schools.com/jsref/jsref_random.asp
-
-
-
-
-
 
 class Player {
     constructor(type) {
@@ -71,26 +63,27 @@ class Player {
 let start = {
     yPositions: [65, 148, 229],
     allEnemies: [],
-    generateSpeed :function() {
+    selected : 'images/char-boy.png',
+    newValues :function() {
         // formula taken from https://www.w3schools.com/jsref/jsref_random.asp
-        return Math.floor(Math.random() * 100 + 100);
+        speed = Math.floor(Math.random() * 100 + 100);
+        initX = - Math.floor(Math.random() * 500 + 100);
+        return {
+            speed: speed,
+            initX: initX
+        }
     },
     create: function(){
         for (row of this.yPositions) {
-            let speed = this.generateSpeed();
-            enemy = new Enemy(-100, row, speed);
+            let values = this.newValues();
+            enemy = new Enemy(values.initX, row, values.speed);
             this.allEnemies.push(enemy);
         }
     }
 
 }
 start.create();
-// Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
-
-let selected = 'images/char-boy.png';
-let player = new Player(selected);
+let player = new Player(start.selected);
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
@@ -101,6 +94,5 @@ document.addEventListener('keyup', function(e) {
         39: 'right',
         40: 'down'
     };
-
     player.handleInput(allowedKeys[e.keyCode]);
 });
