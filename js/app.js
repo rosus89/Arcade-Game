@@ -5,16 +5,28 @@ var Enemy = function(x, y, speed) {
     this.speed = speed;
     this.sprite = 'images/enemy-bug.png';
 };
-enemy = new Enemy(-100, 60, 100);
+
+// formula taken from https://www.w3schools.com/jsref/jsref_random.asp
+function generateSpeed() {
+    return Math.floor(((Math.random() * 300) + 100))
+} 
+
 let allEnemies = [];
-allEnemies.push(enemy);
+yPositions = [60, 143, 226];
+for (row of yPositions){
+    let speed = generateSpeed();
+    enemy = new Enemy(-100, row, speed);
+    allEnemies.push(enemy);
+    }
+
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
-    return this.x += dt * this.speed;
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
+    this.x += dt * this.speed;
+    if (this.x > 500){
+        this.x = -100;
+    }
+
 };
 
 // Draw the enemy on the screen, required method for game
@@ -31,19 +43,22 @@ class Player {
         this.type = type;
         this.x = 202;
         this.y = 404;
+        this.alive = true;
+        this.xSize = 101;
+        this.ySize = 83;
     }
     handleInput(key) {
-        if (key === "up"){
-            this.y -= 83;
+        if (key === "up" && this.y > 0){
+            this.y -= this.ySize;
         }
-        if (key === "down"){
-            this.y += 83;
+        if (key === "down" && this.y < 404){
+            this.y += this.ySize;
         }
-        if (key === "left"){
-            this.x -= 101;
+        if (key === "left" && this.x > 0){
+            this.x -= this.xSize;
         }
-        if (key === "right"){
-            this.x += 101;
+        if (key === "right" && this.x < 404){
+            this.x += this.xSize;
         }
     }
     update(){
