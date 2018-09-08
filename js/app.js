@@ -5,11 +5,19 @@ class Enemy {
         this.y = y;
         this.speed = speed;
         this.sprite = "images/enemy-bug.png";
+        this.height = 67;
+        this.width = 99;
     }
     update(dt) {
         this.x += dt * this.speed;
         if (this.x > 500){
             this.x = -100;
+        }
+        if (this.x < player.x + player.width && this.x + this.width > player.x &&
+            this.y < player.y + player.height && this.y + this.height > player.y) {
+            player.x = 202;
+            player.y = 404;
+            console.log("collision")
         }
     }
     render(){
@@ -19,35 +27,30 @@ class Enemy {
 
 // formula taken from https://www.w3schools.com/jsref/jsref_random.asp
 function generateSpeed() {
-    return Math.floor(((Math.random() * 300) + 100))
+    return Math.floor(((Math.random() * 100) + 100))
 } 
 
-let allEnemies = [];
-yPositions = [60, 143, 226];
+const allEnemies = [];
+yPositions = [65, 148, 229];
+
 for (row of yPositions){
     let speed = generateSpeed();
     enemy = new Enemy(-100, row, speed);
     allEnemies.push(enemy);
     }
 
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
-
-// Draw the enemy on the screen, required method for game
-
-
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
-
 class Player {
     constructor(type) {
         this.type = type;
+        //current position
         this.x = 202;
         this.y = 404;
-        this.alive = true;
+        //step size
         this.xSize = 101;
         this.ySize = 83;
+        //character size
+        this.height = 76;
+        this.width = 67;
     }
     handleInput(key) {
         if (key === "up" && this.y > 0){
@@ -64,7 +67,7 @@ class Player {
         }
     }
     update(){
-
+        
     }
     render(){
         ctx.drawImage(Resources.get(this.type), this.x, this.y)
