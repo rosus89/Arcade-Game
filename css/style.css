@@ -1,3 +1,30 @@
-body {
+* {
     text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.hud {
+    display: flex;
+    height: 2em;
+    background: rgb(111, 223, 111);
+    justify-content: space-evenly;
+    font-weight: 800;
+    font-size: 2em;
+}
+
+.lifes {
+    height: 2em;
+}
+
+.lifes img {
+    height: inherit;
+}
+
+.score {
+line-height: 2em;
+}
+
+.level {
+line-height: 2em;
 }
