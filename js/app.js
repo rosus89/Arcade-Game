@@ -4,8 +4,8 @@ class Enemy {
         this.y = y;
         this.speed = speed;
         this.sprite = "images/enemy-bug.png";
-        this.height = 67;
-        this.width = 99;
+        this.height = 83;
+        this.width = 70;
     }
     update(dt) {
         this.x += dt * this.speed;
@@ -15,7 +15,7 @@ class Enemy {
         if (this.x < player.x + player.width && this.x + this.width > player.x &&
             this.y < player.y + player.height && this.y + this.height > player.y) {
             player.x = 202;
-            player.y = 404;
+            player.y = 405;
             console.log("collision")
         }
     }
@@ -27,14 +27,15 @@ class Enemy {
 class Player {
     constructor(type) {
         this.type = type;
+        this.score = 0;
         //current position
         this.x = 202;
-        this.y = 404;
+        this.y = 405;
         //step size
         this.xSize = 101;
         this.ySize = 83;
         //character size
-        this.height = 76;
+        this.height = 30;
         this.width = 67;
     }
     handleInput(key) {
@@ -52,7 +53,14 @@ class Player {
         }
     }
     update(){
-        
+        //resets player position once he reaches the water
+        if (this.y == -10) {
+            this.x = 202;
+            this.y = 405;
+            this.score++;
+            console.log(player.score);
+        }
+
     }
     render(){
         ctx.drawImage(Resources.get(this.type), this.x, this.y)
@@ -61,9 +69,11 @@ class Player {
 
 
 let start = {
-    yPositions: [65, 148, 229],
+    level: 1,
+    score: 0,
+    rowPositions: [65, 148, 229],
     allEnemies: [],
-    selected : 'images/char-boy.png',
+    character : 'images/char-boy.png',
     newValues :function() {
         // formula taken from https://www.w3schools.com/jsref/jsref_random.asp
         speed = Math.floor(Math.random() * 100 + 100);
@@ -74,16 +84,21 @@ let start = {
         }
     },
     create: function(){
-        for (row of this.yPositions) {
+        for (row of this.rowPositions) {
             let values = this.newValues();
             enemy = new Enemy(values.initX, row, values.speed);
             this.allEnemies.push(enemy);
         }
+    },
+    update: function(){
+
+        this.level ++;
+        console.log("level: " + this.level);
     }
 
 }
 start.create();
-let player = new Player(start.selected);
+let player = new Player(start.character);
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
