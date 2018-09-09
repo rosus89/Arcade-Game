@@ -28,6 +28,7 @@ class Player {
     constructor(type) {
         this.type = type;
         this.score = 0;
+        this.level = 1;
         //current position
         this.x = 202;
         this.y = 405;
@@ -57,8 +58,10 @@ class Player {
         if (this.y == -10) {
             this.x = 202;
             this.y = 405;
-            this.score++;
-            console.log(player.score);
+            this.score = this.score + 5 * this.level;
+            this.level++;
+            console.log(this.score)
+            select(this.level, this.score)
         }
 
     }
@@ -66,18 +69,20 @@ class Player {
         ctx.drawImage(Resources.get(this.type), this.x, this.y)
     }
 }
-
+function select(level, score) {
+    document.querySelector(".score-value").textContent = score;
+    document.querySelector(".level-value").textContent = level;
+};
 
 let start = {
-    level: 1,
-    score: 0,
     rowPositions: [65, 148, 229],
     allEnemies: [],
     character : 'images/char-boy.png',
     newValues :function() {
         // formula taken from https://www.w3schools.com/jsref/jsref_random.asp
-        speed = Math.floor(Math.random() * 100 + 100);
-        initX = - Math.floor(Math.random() * 500 + 100);
+
+        let speed = Math.floor(Math.random() * 100 + 50);
+        let initX = - Math.floor(Math.random() * 500 + 100);
         return {
             speed: speed,
             initX: initX
