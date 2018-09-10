@@ -1,3 +1,6 @@
+let character = {
+    stripe: "images/char-boy.png"
+}
 class Enemy {
     constructor(x, y, speed){
         this.x = x;
@@ -12,11 +15,11 @@ class Enemy {
         if (this.x > 500){
             this.x = -100;
         }
+        // collision check
         if (this.x < player.x + player.width && this.x + this.width > player.x &&
             this.y < player.y + player.height && this.y + this.height > player.y) {
             player.x = 202;
             player.y = 405;
-            console.log("collision")
         }
     }
     render(){
@@ -60,8 +63,8 @@ class Player {
             this.y = 405;
             this.score = this.score + 5 * this.level;
             this.level++;
-            console.log(this.score)
             select(this.level, this.score)
+            start.difficulty();
         }
 
     }
@@ -74,14 +77,15 @@ function select(level, score) {
     document.querySelector(".level-value").textContent = level;
 };
 
+let player = new Player(character.stripe);
 let start = {
     rowPositions: [65, 148, 229],
     allEnemies: [],
-    character : 'images/char-boy.png',
+    nextRow: 0,
     newValues :function() {
         // formula taken from https://www.w3schools.com/jsref/jsref_random.asp
 
-        let speed = Math.floor(Math.random() * 100 + 50);
+        let speed = Math.floor(Math.random() * 100 + 10 * player.level);
         let initX = - Math.floor(Math.random() * 500 + 100);
         return {
             speed: speed,
@@ -95,15 +99,23 @@ let start = {
             this.allEnemies.push(enemy);
         }
     },
-    update: function(){
-
-        this.level ++;
-        console.log("level: " + this.level);
+    difficulty: function(){
+        let values = this.newValues();
+        let row = this.rowPositions[this.nextRow];
+        this.nextRow++;
+        if(this.nextRow == 3){
+            this.nextRow = 0;
+        }
+        if(this.allEnemies.length == 6){
+            this.allEnemies.splice(0,1);
+        }
+        enemy = new Enemy(values.initX, row, values.speed);
+        this.allEnemies.push(enemy);
     }
 
 }
 start.create();
-let player = new Player(start.character);
+
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
