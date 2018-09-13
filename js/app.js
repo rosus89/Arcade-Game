@@ -33,7 +33,7 @@ class Enemy {
         if (this.x < player.x + player.width && this.x + this.width > player.x &&
             this.y < player.y + player.height && this.y + this.height > player.y) {
             player.x = 202;
-            player.y = 405;
+            player.y = 322;
         }
     }
     render(){
@@ -58,11 +58,10 @@ class Player {
     }
     handleInput(key) {
         if (key === "up" && this.y == 405) {
-            updatePlayer(this.x);
+            start.updatePlayer(this.x);
         }
         if (key === "down" && this.y == 322) {
-            returnSelector();
-            console.log("selector")
+            start.returnSelector();
         }
         if (key === "up" && this.y > 0){
             this.y -= this.ySize;
@@ -101,24 +100,17 @@ function hud(level, score) {
 
 let player = new Player("images/Selector.png");
 
-// Changes the player sprite
-function updatePlayer(x){
-    for (let item of list){
-        if (x == item.x)
-            player.sprite = item.sprite;
-    }
-}
-function returnSelector(){
-    player.sprite = "images/Selector.png";
-}
-let start = {
+
+
+const start = {
     rowPositions: [65, 148, 229],
     allEnemies: [],
     allCharacters: [],
     nextRow: 0,
+
+    //Generates: speed of enemies and their position on X axis
     newValues :function() {
         // formula taken from https://www.w3schools.com/jsref/jsref_random.asp
-
         let speed = Math.floor(Math.random() * 100 + 10 * player.level);
         let initX = - Math.floor(Math.random() * 500 + 100);
         return {
@@ -126,13 +118,24 @@ let start = {
             initX: initX
         }
     },
+
+    // creates enemies and characters
     create: function(){
+        // enemies
         for (row of this.rowPositions) {
             let values = this.newValues();
             enemy = new Enemy(values.initX, row, values.speed);
             this.allEnemies.push(enemy);
         }
+        // characters
+        for (let char of list) {
+            character = new Character(char.sprite, char.x);
+            start.allCharacters.push(character);
+        }
     },
+
+    // increases difficulty by adding new enemies to a maximum of 6 
+    // keeps adding faster enemies at the end of the array while deleting first enemy in the array
     difficulty: function(){
         let values = this.newValues();
         let row = this.rowPositions[this.nextRow];
@@ -145,19 +148,25 @@ let start = {
         }
         enemy = new Enemy(values.initX, row, values.speed);
         this.allEnemies.push(enemy);
+    },
+    // Changes the player sprite
+    updatePlayer: function(x){
+        for (let item of list) {
+    if (x == item.x)
+        player.sprite = item.sprite;
+        }
+    },
+    returnSelector: function(){
+        player.sprite = "images/Selector.png";
     }
-
 }
 start.create();
-for (let char of list) {
-    character = new Character(char.sprite, char.x);
-    start.allCharacters.push(character);
-}
+
 
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
-document.addEventListener('keyup', function(e) {
+document.addEventListener('keydown', function(e) {
     var allowedKeys = {
         37: 'left',
         38: 'up',
