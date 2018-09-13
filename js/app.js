@@ -1,4 +1,4 @@
-let list = [
+let charList = [
     {sprite:'images/char-boy.png', x:0},
     {sprite:'images/char-cat-girl.png', x:101},
     {sprite:'images/char-horn-girl.png', x:202},
@@ -34,6 +34,11 @@ class Enemy {
             this.y < player.y + player.height && this.y + this.height > player.y) {
             player.x = 202;
             player.y = 322;
+            player.lifes--;
+            start.displayLifes();
+            if(player.lifes == 0){
+                start.modal(start.endModal);
+            }
         }
     }
     render(){
@@ -46,6 +51,7 @@ class Player {
         this.sprite = sprite;
         this.score = 0;
         this.level = 1;
+        this.lifes = 3;
         //current position
         this.x = 202;
         this.y = 405;
@@ -104,12 +110,25 @@ let player = new Player("images/Selector.png");
 
 const start = {
     rowPositions: [65, 148, 229],
-    allEnemies: [],
-    allCharacters: [],
-    nextRow: 0,
+    init: function(){
+        this.allEnemies = [];
+        this.allCharacters = [];
+        this.nextRow = 0;
+        this.create();
+        this.displayLifes();
+    },
+
+    reset: function(){
+        this.init();
+        hud(1,0);
+        this.modal(this.endModal);
+        return (() => {
+            player = new Player("images/Selector.png");
+        })();
+    },
 
     //Generates: speed of enemies and their position on X axis
-    newValues :function() {
+    newValues:function() {
         // formula taken from https://www.w3schools.com/jsref/jsref_random.asp
         let speed = Math.floor(Math.random() * 100 + 10 * player.level);
         let initX = - Math.floor(Math.random() * 500 + 100);
@@ -128,7 +147,7 @@ const start = {
             this.allEnemies.push(enemy);
         }
         // characters
-        for (let char of list) {
+        for (let char of charList) {
             character = new Character(char.sprite, char.x);
             start.allCharacters.push(character);
         }
@@ -151,17 +170,34 @@ const start = {
     },
     // Changes the player sprite
     updatePlayer: function(x){
-        for (let item of list) {
+        for (let item of charList) {
     if (x == item.x)
         player.sprite = item.sprite;
         }
     },
     returnSelector: function(){
         player.sprite = "images/Selector.png";
+    },
+    displayLifes: function(){
+        let lifes = document.querySelector(".lifes");
+        lifes.innerHTML = "";
+        for (let i = 0; i < player.lifes; i++) {
+            let heart = document.createElement("IMG");
+            heart.setAttribute("src", "images/Heart.png");
+            lifes.appendChild(heart);
+        }
+    },
+    endModal: document.querySelector("#end-game"),
+    modal: function(selector){
+        if (selector.style.display == "flex") {
+            selector.style.display = "none";
+        }
+        else {
+            selector.style.display = "flex";
+        }
     }
 }
-start.create();
-
+start.init();
 
 
 // This listens for key presses and sends the keys to your

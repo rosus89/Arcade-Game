@@ -28,3 +28,25 @@ line-height: 2em;
 .level {
 line-height: 2em;
 }
+
+.modal {
+    display: none; 
+    z-index: 1;
+    position: fixed;
+    top : 0;
+    left: 0;
+    width: 100%;
+    height: 100%;;
+    margin:auto;
+    background: rgba(0, 0, 0, 0.3);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-container {
+    width:400px;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.5);
+    box-shadow: 10px 10px 50px 0px rgba(0,0,0,0.75);
+    padding: 20px;
+}

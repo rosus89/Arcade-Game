@@ -8,11 +8,20 @@
 <body>
     <div class="hud">
         <ul class="lifes">
-            <img src="images/Heart.png" alt="heart lifes">
         </ul>
         <div class="score">Score: <span class="score-value">0</span></div>
         <div class="level">Level: <span class="level-value">1</span></div>
     </div>
+    <!-- Endgame Modal - Start -->
+    <div class="modal" id="end-game">
+        <div class="modal-container">
+            <h4>Game Over</h4>
+            <hr>
+            <hr>
+            <button onclick="start.reset()">Reset</button>
+        </div>
+    </div>
+        <!-- Endgame Modal - End -->
     <script src="js/resources.js"></script>
     <script src="js/app.js"></script>
     <script src="js/engine.js"></script>
