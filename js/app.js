@@ -1,6 +1,20 @@
-let character = {
-    stripe: "images/char-boy.png"
+let list = [
+    {sprite:'images/char-boy.png', x:0},
+    {sprite:'images/char-cat-girl.png', x:101},
+    {sprite:'images/char-horn-girl.png', x:202},
+    {sprite:'images/char-pink-girl.png', x:303},
+    {sprite:'images/char-princess-girl.png', x:404}];
+
+class Character {
+    constructor(sprite, x){
+    this.sprite = sprite;
+    this.x = x;
+    }
+    render() {
+        ctx.drawImage(Resources.get(this.sprite), this.x, 405);
+    }
 }
+
 class Enemy {
     constructor(x, y, speed){
         this.x = x;
@@ -28,8 +42,8 @@ class Enemy {
 };
 
 class Player {
-    constructor(type) {
-        this.type = type;
+    constructor(sprite) {
+        this.sprite = sprite;
         this.score = 0;
         this.level = 1;
         //current position
@@ -43,44 +57,64 @@ class Player {
         this.width = 67;
     }
     handleInput(key) {
+        if (key === "up" && this.y == 405) {
+            updatePlayer(this.x);
+        }
+        if (key === "down" && this.y == 322) {
+            returnSelector();
+            console.log("selector")
+        }
         if (key === "up" && this.y > 0){
             this.y -= this.ySize;
         }
-        if (key === "down" && this.y < 404){
+        else if (key === "down" && this.y < 404){
             this.y += this.ySize;
         }
-        if (key === "left" && this.x > 0){
+        else if (key === "left" && this.x > 0){
             this.x -= this.xSize;
         }
-        if (key === "right" && this.x < 404){
+        else if (key === "right" && this.x < 404){
             this.x += this.xSize;
         }
+
     }
     update(){
-        //resets player position once he reaches the water
+        //resets player position and increases score once player reaches the water
         if (this.y == -10) {
             this.x = 202;
-            this.y = 405;
+            this.y = 322;
             this.score = this.score + 5 * this.level;
             this.level++;
-            select(this.level, this.score)
+            hud(this.level, this.score)
             start.difficulty();
         }
 
     }
     render(){
-        ctx.drawImage(Resources.get(this.type), this.x, this.y)
+        ctx.drawImage(Resources.get(this.sprite), this.x, this.y)
     }
 }
-function select(level, score) {
+function hud(level, score) {
     document.querySelector(".score-value").textContent = score;
     document.querySelector(".level-value").textContent = level;
 };
 
-let player = new Player(character.stripe);
+let player = new Player("images/Selector.png");
+
+// Changes the player sprite
+function updatePlayer(x){
+    for (let item of list){
+        if (x == item.x)
+            player.sprite = item.sprite;
+    }
+}
+function returnSelector(){
+    player.sprite = "images/Selector.png";
+}
 let start = {
     rowPositions: [65, 148, 229],
     allEnemies: [],
+    allCharacters: [],
     nextRow: 0,
     newValues :function() {
         // formula taken from https://www.w3schools.com/jsref/jsref_random.asp
@@ -115,6 +149,10 @@ let start = {
 
 }
 start.create();
+for (let char of list) {
+    character = new Character(char.sprite, char.x);
+    start.allCharacters.push(character);
+}
 
 
 // This listens for key presses and sends the keys to your

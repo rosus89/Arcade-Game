@@ -152,8 +152,11 @@ var Engine = (function(global) {
         start.allEnemies.forEach(function(enemy) {
             enemy.render();
         });
-
         player.render();
+        start.allCharacters.forEach(function(character){
+            character.render();
+        })
+        
     }
 
     /* This function does nothing but it could have been a good place to
@@ -173,7 +176,12 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-boy.png',
+        'images/char-cat-girl.png',
+        'images/char-horn-girl.png',
+        'images/char-pink-girl.png',
+        'images/char-princess-girl.png',
+        'images/Selector.png'
     ]);
     Resources.onReady(init);
 
