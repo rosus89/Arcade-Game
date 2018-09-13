@@ -119,12 +119,13 @@ const start = {
     },
 
     reset: function(){
-        this.init();
         hud(1,0);
         this.modal(this.endModal);
         return (() => {
             player = new Player("images/Selector.png");
+            this.init();
         })();
+        
     },
 
     //Generates: speed of enemies and their position on X axis
