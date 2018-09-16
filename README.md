@@ -27,3 +27,4 @@ The code is written in plain javascript so it has no dependency to any library o
 ## Copyright and License
 
 [See Licence](https://opensource.org/licenses/MIT)
+
