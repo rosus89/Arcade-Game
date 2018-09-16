@@ -124,6 +124,7 @@ const start = {
         this.allCharacters = [];
         this.nextRow = 0;
         this.create();
+        this.renderCharacters();
         this.displayLifes();
     },
 
@@ -156,13 +157,14 @@ const start = {
             enemy = new Enemy(values.initX, row, values.speed);
             this.allEnemies.push(enemy);
         }
-        // characters
+
+    },
+    renderCharacters: function() {
         for (let char of this.charList) {
             character = new Character(char.sprite, char.x);
             start.allCharacters.push(character);
         }
     },
-
     // increases difficulty by adding new enemies to a maximum of 6 
     // keeps adding faster enemies at the end of the array while deleting first enemy in the array
     difficulty: function(){
@@ -183,11 +185,15 @@ const start = {
         for (let item of this.charList) {
             if (x == item.x){
                 player.sprite = item.sprite;
+                let index = this.charList.indexOf(item);
+                this.allCharacters.splice(index,1);
             }
         }
     },
     returnSelector: function(){
         player.sprite = "images/Selector.png";
+        this.allCharacters = [];
+        this.renderCharacters();
     },
     displayLifes: function(){
         let lifes = document.querySelector(".lifes");
