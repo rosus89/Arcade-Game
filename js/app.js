@@ -1,10 +1,4 @@
-let charList = [
-    {sprite:'images/char-boy.png', x:0},
-    {sprite:'images/char-cat-girl.png', x:101},
-    {sprite:'images/char-horn-girl.png', x:202},
-    {sprite:'images/char-pink-girl.png', x:303},
-    {sprite:'images/char-princess-girl.png', x:404}];
-
+// characters used for sprite Selection
 class Character {
     constructor(sprite, x){
     this.sprite = sprite;
@@ -15,6 +9,7 @@ class Character {
     }
 }
 
+//
 class Enemy {
     constructor(x, y, speed){
         this.x = x;
@@ -26,6 +21,7 @@ class Enemy {
     }
     update(dt) {
         this.x += dt * this.speed;
+        // makes enemies loop on screen
         if (this.x > 500){
             this.x = -100;
         }
@@ -34,8 +30,10 @@ class Enemy {
             this.y < player.y + player.height && this.y + this.height > player.y) {
             player.x = 202;
             player.y = 322;
+            // controls lifes amound and their display
             player.lifes--;
             start.displayLifes();
+            // ends game when player is ouf of lifes
             if(player.lifes == 0){
                 start.modal(start.endModal);
             }
@@ -52,7 +50,7 @@ class Player {
         this.score = 0;
         this.level = 1;
         this.lifes = 3;
-        //current position
+        //current position / initial position
         this.x = 202;
         this.y = 405;
         //step size
@@ -63,12 +61,14 @@ class Player {
         this.width = 67;
     }
     handleInput(key) {
+        // character selection controls: Start
         if (key === "up" && this.y == 405) {
             start.updatePlayer(this.x);
         }
         if (key === "down" && this.y == 322) {
             start.returnSelector();
         }
+        // character selection controls: Start
         if (key === "up" && this.y > 0){
             this.y -= this.ySize;
         }
@@ -81,10 +81,11 @@ class Player {
         else if (key === "right" && this.x < 404){
             this.x += this.xSize;
         }
-
     }
+
     update(){
-        //resets player position and increases score once player reaches the water
+        // resets player position and increases score once player reaches the water
+        // increases Score, Level and difficulty
         if (this.y == -10) {
             this.x = 202;
             this.y = 322;
@@ -93,12 +94,13 @@ class Player {
             hud(this.level, this.score)
             start.difficulty();
         }
-
     }
     render(){
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y)
     }
 }
+
+// Updates DOM: score and player level
 function hud(level, score) {
     document.querySelector(".score-value").textContent = score;
     document.querySelector(".level-value").textContent = level;
@@ -106,10 +108,17 @@ function hud(level, score) {
 
 let player = new Player("images/Selector.png");
 
-
-
 const start = {
+    // Enemy row posiions
     rowPositions: [65, 148, 229],
+    // Character Sprites and their position on X axis
+    charList : [
+        { sprite: 'images/char-boy.png', x: 0 },
+        { sprite: 'images/char-cat-girl.png', x: 101 },
+        { sprite: 'images/char-horn-girl.png', x: 202 },
+        { sprite: 'images/char-pink-girl.png', x: 303 },
+        { sprite: 'images/char-princess-girl.png', x: 404 }],
+
     init: function(){
         this.allEnemies = [];
         this.allCharacters = [];
@@ -148,7 +157,7 @@ const start = {
             this.allEnemies.push(enemy);
         }
         // characters
-        for (let char of charList) {
+        for (let char of this.charList) {
             character = new Character(char.sprite, char.x);
             start.allCharacters.push(character);
         }
@@ -171,7 +180,7 @@ const start = {
     },
     // Changes the player sprite
     updatePlayer: function(x){
-        for (let item of charList) {
+        for (let item of this.charList) {
     if (x == item.x)
         player.sprite = item.sprite;
         }
