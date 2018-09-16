@@ -181,8 +181,9 @@ const start = {
     // Changes the player sprite
     updatePlayer: function(x){
         for (let item of this.charList) {
-    if (x == item.x)
-        player.sprite = item.sprite;
+            if (x == item.x){
+                player.sprite = item.sprite;
+            }
         }
     },
     returnSelector: function(){
