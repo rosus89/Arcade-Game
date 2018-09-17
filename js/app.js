@@ -1,3 +1,4 @@
+'use strict';
 // characters used for sprite Selection
 class Character {
     constructor(sprite, x){
@@ -152,16 +153,16 @@ const start = {
     // creates enemies and characters
     create: function(){
         // enemies
-        for (row of this.rowPositions) {
+        for (let row of this.rowPositions) {
             let values = this.newValues();
-            enemy = new Enemy(values.initX, row, values.speed);
+            let enemy = new Enemy(values.initX, row, values.speed);
             this.allEnemies.push(enemy);
         }
 
     },
     renderCharacters: function() {
         for (let char of this.charList) {
-            character = new Character(char.sprite, char.x);
+            let character = new Character(char.sprite, char.x);
             start.allCharacters.push(character);
         }
     },
@@ -177,7 +178,7 @@ const start = {
         if(this.allEnemies.length == 6){
             this.allEnemies.splice(0,1);
         }
-        enemy = new Enemy(values.initX, row, values.speed);
+        let enemy = new Enemy(values.initX, row, values.speed);
         this.allEnemies.push(enemy);
     },
     // Changes the player sprite
